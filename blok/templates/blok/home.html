@@ -1,0 +1,10 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<h1>Główna strona</h1>
+
+{% for story in stories %}
+    <p><a href="{% url 'article' story.id %}">{{story}}</a></p>
+{% endfor %}
+
+{% endblock content %}
