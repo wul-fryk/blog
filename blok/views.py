@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import Article,Coment
+from .models import Article, Coment, User
 from .forms import ComentFrom, UserForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -26,6 +26,7 @@ def article_page(request,pk):
     return render(request, 'blok/article.html', context)
 
 def user_register(request):
+    status = 'rejestruj'
     user_form = UserForm()
     if request.method == 'POST':
         user_form = UserForm(request.POST)
@@ -35,5 +36,32 @@ def user_register(request):
             return redirect('home')
         else:
             messages.error(request, 'Rejestracja zakończona niepowodzeniem.')
-    context = {'user_form': user_form}
+    context = {'user_form': user_form, 'status':status}
     return render(request, 'blok/login_register.html', context)
+
+def user_login(request):
+    status = 'login'
+    
+    if request.method == 'POST':
+        user_username = request.POST.get('username')
+        user_password = request.POST.get('password')
+        checker = False
+        try:
+            user = User.objects.get(username=user_username)
+        except:
+            checker = True
+        
+        user = authenticate(request, username = user_username, password = user_password)
+
+        if user is None or checker is True:
+            messages.error(request, 'Nieprawidłowy login lub hasło.')
+
+        else:
+            login(request, user)
+            return redirect('home')
+    context = {'status':status}
+    return render(request, 'blok/login_register.html', context)
+
+def user_logout(request):
+    logout(request)
+    return redirect('home')

@@ -2,12 +2,37 @@
 {% block content %}
 
 <div>
-    <form method="POST" action="">
-        {% csrf_token %}
-        {{user_form.as_p}}
-        <input type="submit">
-    </form>
-</div>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% if status == 'login' %}
+    <div>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <label>Login:</label>
+            <input type="text" required name="username" placeholder="Twój login...">
 
+            <label>Hasło:</label>
+            <input type="text" required name="password" placeholder="Twoje hasło...">
+
+            <input type="submit" value="Zaloguj">
+        </form>
+        <span>Nie masz jeszcze konta?</span>
+        <a href="{% url 'register' %}">Zarejestruj</a>
+    </div>
+    {% else %}
+    <div>
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{user_form.as_p}}
+            <input type="submit">
+        </form>
+    </div>
+    {% endif %}
+</div>
 
 {% endblock content %}
