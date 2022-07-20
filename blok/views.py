@@ -6,24 +6,27 @@ from django.contrib import messages
 
 # Create your views here.
 
+
 def home(request):
     stories = Article.objects.all()
-    context = {'stories':stories}
+    context = {'stories': stories}
     return render(request, 'blok/home.html', context)
 
-def article_page(request,pk):
+
+def article_page(request, pk):
     story = Article.objects.get(id=pk)
     coments = Coment.objects.all().order_by('-coment_publication')
     form = ComentFrom()
     if request.method == 'POST':
         Coment.objects.create(
-            comented_article = story,
-            coments_author = request.user,
-            coment = request.POST.get('coment'),
+            comented_article=story,
+            coments_author=request.user,
+            coment=request.POST.get('coment'),
         )
         return redirect('article', story.id)
-    context = {'story':story, 'coments':coments,'form':form}
+    context = {'story': story, 'coments': coments, 'form': form}
     return render(request, 'blok/article.html', context)
+
 
 def user_register(request):
     status = 'rejestruj'
@@ -36,12 +39,13 @@ def user_register(request):
             return redirect('home')
         else:
             messages.error(request, 'Rejestracja zakończona niepowodzeniem.')
-    context = {'user_form': user_form, 'status':status}
+    context = {'user_form': user_form, 'status': status}
     return render(request, 'blok/login_register.html', context)
+
 
 def user_login(request):
     status = 'login'
-    
+
     if request.method == 'POST':
         user_username = request.POST.get('username')
         user_password = request.POST.get('password')
@@ -50,8 +54,9 @@ def user_login(request):
             user = User.objects.get(username=user_username)
         except:
             checker = True
-        
-        user = authenticate(request, username = user_username, password = user_password)
+
+        user = authenticate(request, username=user_username,
+                            password=user_password)
 
         if user is None or checker is True:
             messages.error(request, 'Nieprawidłowy login lub hasło.')
@@ -59,9 +64,16 @@ def user_login(request):
         else:
             login(request, user)
             return redirect('home')
-    context = {'status':status}
+    context = {'status': status}
     return render(request, 'blok/login_register.html', context)
+
 
 def user_logout(request):
     logout(request)
     return redirect('home')
+
+
+def profile(request, pk):
+    profile_owner = User.objects.get(id=pk)
+    context = {'profile_owner': profile_owner}
+    return render(request, 'blok\profile.html', context)

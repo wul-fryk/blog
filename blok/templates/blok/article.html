@@ -1,35 +1,30 @@
-{% extends 'main.html' %}
-
-{% block content %}
+{% extends 'main.html' %} {% block content %}
 <div>
-    <div>
-        <small>{{story.publication_date}}</small>
-        <h1>{{story}}</h1>
-        <p>{{story.content}}</p>
-    </div>
+  <div>
+    <small>{{story.publication_date}}</small>
+    <h1>{{story}}</h1>
+    <p>{{story.content}}</p>
+  </div>
 
-    <div>
-        {% if request.user.is_authenticated %}
-        <form method="POST" action="">
-            {% csrf_token %}
-            {{form}}
-            <input type='submit' >
-        </form>
-        {% else %}
-        <span>Aby dodać komentarz musisz sie zalogować</span>
-        {% endif %}
-    </div>
+  <div>
+    {% if request.user.is_authenticated %}
+    <form method="POST" action="">
+      {% csrf_token %} {{form}}
+      <input type="submit" />
+    </form>
+    {% else %}
+    <span>Aby dodać komentarz musisz sie zalogować</span>
+    {% endif %}
+  </div>
 
-    <div>
-        {% for coment in coments %}
-        <small>{{coment.coments_author}}, {{coment.coment_publication}}</small>
-        <p>{{coment}}</p>
-        {% endfor %}
-    </div>
+  <div>
+    {% for coment in coments %}
+    <small>
+      <a href="{% url 'profile' coment.coments_author.id %}">@{{coment.coments_author}}</a>, {{coment.coment_publication}}
+    </small>
+    <p>{{coment}}</p>
+    {% endfor %}
+  </div>
 </div>
 
-
 {% endblock content %}
-
-
-
