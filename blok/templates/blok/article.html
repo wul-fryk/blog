@@ -2,26 +2,32 @@
 
 {% block content %}
 <div>
-    <small>{{story.publication_date}}</small>
-    <h1>{{story}}</h1>
-    <p>{{story.content}}</p>
+    <div>
+        <small>{{story.publication_date}}</small>
+        <h1>{{story}}</h1>
+        <p>{{story.content}}</p>
+    </div>
+
+    <div>
+        {% if request.user.is_authenticated %}
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{form}}
+            <input type='submit' >
+        </form>
+        {% else %}
+        <span>Aby dodać komentarz musisz sie zalogować</span>
+        {% endif %}
+    </div>
+
+    <div>
+        {% for coment in coments %}
+        <small>{{coment.coments_author}}, {{coment.coment_publication}}</small>
+        <p>{{coment}}</p>
+        {% endfor %}
+    </div>
 </div>
 
-<div>
-    <form method="POST" action="">
-        {% csrf_token %}
-        {{form}}
-        <input type='submit' >
-    </form>
-</div>
-
-
-<div>
-    {% for coment in coments %}
-    <small>{{coment.coments_author}}, {{coment.coment_publication}}</small>
-    <p>{{coment}}</p>
-    {% endfor %}
-</div>
 
 {% endblock content %}
 
