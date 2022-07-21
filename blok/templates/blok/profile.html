@@ -1,6 +1,16 @@
 {% extends 'main.html' %}
 {% block content %}
 
-<h1>{{profile_owner}}</h1>
+<div>
+    <h1>{{profile_owner}}</h1>
+    <div>
+        {% for coment in coments %}
+        <small>{{coment.coment_publication}}</small>
+        <p><a href="{% url 'article' coment.comented_article.id %}">
+            {{coment.comented_article}}</a> {{coment}}</p>
+        
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock content %}

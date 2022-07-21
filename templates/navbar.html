@@ -3,7 +3,7 @@
 <a href="{% url 'login' %}">Zaloguj</a>
 {% else %}
 <a href="{% url 'logout' %}">Wyloguj</a>
-<a>{{request.user.username}}</a>
+<a href="{% url 'profile' request.user.id %}">@{{request.user.username}}</a>
 {% endif %}
 {% if request.user.is_staff %}
 <a href="{% url 'add' %}">Dodaj</a>

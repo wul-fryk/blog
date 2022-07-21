@@ -60,7 +60,8 @@ def user_logout(request):
 
 def profile(request, pk):
     profile_owner = User.objects.get(id=pk)
-    context = {'profile_owner': profile_owner}
+    coments = profile_owner.coment_set.all()
+    context = {'profile_owner': profile_owner, 'coments': coments}
     return render(request, 'blok\profile.html', context)
 
 
