@@ -8,6 +8,7 @@ from . serializers import ArticleSerializer
 def GetRoutes(request):
     routes = [
         'GET/api/articles',
+        'GET/api/article/:id',
         'GET/api/articles-coments'
     ]
 
@@ -18,4 +19,11 @@ def GetRoutes(request):
 def GetArticles(request):
     articles = Article.objects.all()
     serialized = ArticleSerializer(articles, many=True)
+    return Response(serialized.data)
+
+
+@api_view(['GET'])
+def GetArticle(request, pk):
+    articles = Article.objects.get(id=pk)
+    serialized = ArticleSerializer(articles, many=False)
     return Response(serialized.data)
