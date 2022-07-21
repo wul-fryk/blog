@@ -4,7 +4,7 @@
 <h1>Główna strona</h1>
 
 {% for story in stories %}
-    <p><a href="{% url 'article' story.id %}">{{story}}</a></p>
+    <p><a href="{% url 'article' story.id %}">{{story|truncatewords:15}}</a></p>
 {% endfor %}
 
 {% endblock content %}

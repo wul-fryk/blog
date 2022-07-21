@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'blok.apps.BlokConfig',
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

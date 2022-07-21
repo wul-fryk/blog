@@ -1,10 +1,21 @@
-from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from blok.models import Article
+from . serializers import ArticleSerializer
 
 
+@api_view(['GET'])
 def GetRoutes(request):
     routes = [
         'GET/api/articles',
         'GET/api/articles-coments'
     ]
 
-    return JsonResponse(routes, safe=False)
+    return Response(routes)
+
+
+@api_view(['GET'])
+def GetArticles(request):
+    articles = Article.objects.all()
+    serialized = ArticleSerializer(articles, many=True)
+    return Response(serialized.data)

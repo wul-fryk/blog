@@ -5,3 +5,6 @@
 <a href="{% url 'logout' %}">Wyloguj</a>
 <a>{{request.user.username}}</a>
 {% endif %}
+{% if request.user.is_staff %}
+<a href="{% url 'add' %}">Dodaj</a>
+{% endif %}

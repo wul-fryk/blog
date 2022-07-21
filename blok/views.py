@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from .models import Article, Coment, User
-from .forms import ComentFrom, UserForm
+from .forms import ComentFrom, UserForm, ArticleForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
@@ -11,21 +11,6 @@ def home(request):
     stories = Article.objects.all()
     context = {'stories': stories}
     return render(request, 'blok/home.html', context)
-
-
-def article_page(request, pk):
-    story = Article.objects.get(id=pk)
-    coments = Coment.objects.all().order_by('-coment_publication')
-    form = ComentFrom()
-    if request.method == 'POST':
-        Coment.objects.create(
-            comented_article=story,
-            coments_author=request.user,
-            coment=request.POST.get('coment'),
-        )
-        return redirect('article', story.id)
-    context = {'story': story, 'coments': coments, 'form': form}
-    return render(request, 'blok/article.html', context)
 
 
 def user_register(request):
@@ -77,3 +62,30 @@ def profile(request, pk):
     profile_owner = User.objects.get(id=pk)
     context = {'profile_owner': profile_owner}
     return render(request, 'blok\profile.html', context)
+
+
+def article_page(request, pk):
+    story = Article.objects.get(id=pk)
+    coments = Coment.objects.all().order_by('-coment_publication')
+    form = ComentFrom()
+    if request.method == 'POST':
+        Coment.objects.create(
+            comented_article=story,
+            coments_author=request.user,
+            coment=request.POST.get('coment'),
+        )
+        return redirect('article', story.id)
+    context = {'story': story, 'coments': coments, 'form': form}
+    return render(request, 'blok/article.html', context)
+
+
+def article_add(request):
+    form = ArticleForm()
+    if request.method == 'POST':
+        new_article = Article.objects.create(
+            title=request.POST.get('title'),
+            content=request.POST.get('content'),
+            author=request.user
+        )
+        return redirect('article', new_article.id)
+    return render(request, 'blok/add_article.html', {'form': form})
